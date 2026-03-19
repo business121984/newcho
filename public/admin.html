@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin – NEW CHỢ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --green:#1a7a3c;--green-dark:#0f5228;--green-accent:#2ecc71;
+  --green-light:#eaf7ef;--white:#fff;--off:#f5f8f6;
+  --text:#0f1a12;--muted:#4d6657;--border:#cde5d6;--red:#e53935;
+}
+body{font-family:'Lexend',sans-serif;background:var(--off);color:var(--text);font-size:14px;line-height:1.6;min-height:100vh}
+
+/* Header */
+.admin-header{background:var(--green-dark);color:#fff;padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.15)}
+.admin-header h1{font-size:1.1rem;font-weight:800;display:flex;align-items:center;gap:8px}
+.admin-header h1 span{color:var(--green-accent)}
+.header-actions{display:flex;align-items:center;gap:8px}
+.hbtn{padding:6px 14px;border-radius:7px;font-family:'Lexend',sans-serif;font-size:.78rem;font-weight:700;border:none;cursor:pointer;transition:all .15s}
+.hbtn-accent{background:var(--green-accent);color:var(--green-dark)}
+.hbtn-accent:hover{background:#27ae60;color:#fff}
+.hbtn-outline{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2)}
+.hbtn-outline:hover{background:rgba(255,255,255,.22)}
+.hbtn-red{background:#dc2626;color:#fff}
+.hbtn-red:hover{background:#b91c1c}
+
+/* Layout */
+.admin-body{max-width:1100px;margin:0 auto;padding:1.5rem}
+
+/* Login */
+.login-card{max-width:380px;margin:80px auto;background:#fff;border-radius:16px;padding:2rem;box-shadow:0 8px 32px rgba(0,0,0,.08);border:1px solid var(--border)}
+.login-card h2{font-size:1.2rem;font-weight:800;margin-bottom:.5rem;text-align:center}
+.login-card p{color:var(--muted);font-size:.82rem;text-align:center;margin-bottom:1.2rem}
+
+/* Cards */
+.card{background:#fff;border-radius:14px;padding:1.25rem;box-shadow:0 2px 12px rgba(0,0,0,.04);border:1px solid var(--border);margin-bottom:1rem}
+.card-title{font-size:.95rem;font-weight:800;margin-bottom:.75rem;display:flex;align-items:center;gap:8px}
+.card-title .badge{font-size:.7rem;background:var(--green-light);color:var(--green);padding:2px 8px;border-radius:5px;border:1px solid var(--border);font-weight:700}
+
+/* Tabs */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem}
+.tab{padding:6px 14px;border-radius:8px;font-size:.78rem;font-weight:700;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-family:'Lexend',sans-serif;color:var(--muted);transition:all .15s}
+.tab:hover{border-color:var(--green);color:var(--green);background:var(--green-light)}
+.tab.active{background:var(--green);color:#fff;border-color:var(--green)}
+
+/* Section tabs (top-level) */
+.section-tabs{display:flex;gap:4px;background:#fff;padding:8px;border-radius:12px;border:1px solid var(--border);margin-bottom:1.25rem;flex-wrap:wrap}
+.stab{padding:8px 16px;border-radius:8px;font-size:.82rem;font-weight:700;border:none;background:transparent;cursor:pointer;font-family:'Lexend',sans-serif;color:var(--muted);transition:all .15s}
+.stab:hover{background:var(--green-light);color:var(--green)}
+.stab.active{background:var(--green);color:#fff}
+
+/* Form */
+.form-group{margin-bottom:.85rem}
+.form-label{font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.3rem;display:block}
+.form-input{width:100%;height:38px;padding:0 12px;border:1.5px solid var(--border);border-radius:8px;font-family:'Lexend',sans-serif;font-size:.84rem;color:var(--text);background:#fff;outline:none;transition:border-color .18s}
+.form-input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(26,122,60,.08)}
+textarea.form-input{height:80px;padding:10px 12px;resize:vertical}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form-row3{display:grid;grid-template-columns:1fr 1fr 80px;gap:10px}
+
+/* Buttons */
+.btn{padding:8px 18px;border-radius:8px;font-family:'Lexend',sans-serif;font-size:.82rem;font-weight:700;cursor:pointer;border:none;transition:all .15s;display:inline-flex;align-items:center;gap:6px}
+.btn-green{background:var(--green);color:#fff}
+.btn-green:hover{background:var(--green-dark)}
+.btn-red{background:#fee2e2;color:#b91c1c;border:1.5px solid #fca5a5}
+.btn-red:hover{background:#fca5a5}
+.btn-gray{background:var(--off);color:var(--text);border:1.5px solid var(--border)}
+.btn-gray:hover{background:var(--border)}
+.btn-sm{padding:5px 10px;font-size:.75rem}
+
+/* Table */
+.item-row{display:grid;grid-template-columns:32px 1fr auto auto;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;transition:background .12s}
+.item-row:hover{background:var(--green-light)}
+.item-row+.item-row{border-top:1px solid var(--border)}
+.item-icon{font-size:1.1rem;text-align:center}
+.item-name{min-width:0}
+.item-viet{font-size:.65rem;color:var(--green);font-weight:700}
+.item-en{font-size:.8rem;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item-price{font-size:.82rem;font-weight:800;color:var(--green-dark);white-space:nowrap}
+.item-actions{display:flex;gap:4px}
+.ibtn{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;font-size:.85rem;transition:all .15s}
+.ibtn-edit{background:var(--green-light);color:var(--green)}
+.ibtn-edit:hover{background:var(--green);color:#fff}
+.ibtn-del{background:#fee2e2;color:#b91c1c}
+.ibtn-del:hover{background:#ef4444;color:#fff}
+
+.items-list{max-height:420px;overflow-y:auto;border:1px solid var(--border);border-radius:10px}
+
+/* Toast */
+.toast{position:fixed;top:80px;right:20px;padding:12px 20px;border-radius:10px;font-size:.82rem;font-weight:700;z-index:9999;animation:slideIn .3s;box-shadow:0 6px 20px rgba(0,0,0,.12)}
+.toast-ok{background:#dcfce7;color:#166534;border:1px solid #86efac}
+.toast-err{background:#fee2e2;color:#b91c1c;border:1px solid #fca5a5}
+@keyframes slideIn{from{transform:translateX(100px);opacity:0}to{transform:translateX(0);opacity:1}}
+
+/* Status dot */
+.status-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px}
+.status-dot.online{background:var(--green-accent)}
+.status-dot.offline{background:var(--red)}
+
+/* Responsive */
+@media(max-width:600px){
+  .admin-body{padding:1rem}
+  .form-row,.form-row3{grid-template-columns:1fr}
+  .item-row{grid-template-columns:24px 1fr auto}
+  .item-price{display:none}
+}
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script>
+const API = '';
+let TOKEN = localStorage.getItem('newcho_admin_token') || '';
+let currentSection = 'products';
+let currentCatId = '';
+let allProducts = [];
+
+function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+function fmt(p) { return '$' + Number(p).toFixed(2); }
+
+async function apiFetch(path, opts = {}) {
+  const headers = { 'Content-Type': 'application/json', ...opts.headers };
+  if (TOKEN) headers['x-admin-token'] = TOKEN;
+  const res = await fetch(API + path, { ...opts, headers });
+  return res.json();
+}
+
+function toast(msg, type = 'ok') {
+  const el = document.createElement('div');
+  el.className = 'toast toast-' + type;
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 3000);
+}
+
+// ══════ RENDER ══════
+
+function render() {
+  if (!TOKEN) { renderLogin(); return; }
+  renderDashboard();
+}
+
+function renderLogin() {
+  document.getElementById('app').innerHTML = `
+    <div class="admin-header">
+      <h1>🌿 NEW <span>CHỢ</span> Admin</h1>
+    </div>
+    <div class="login-card">
+      <h2>🔐 Đăng nhập Admin</h2>
+      <p>Nhập mật khẩu để quản lý cửa hàng</p>
+      <div class="form-group">
+        <label class="form-label">Mật khẩu</label>
+        <input class="form-input" type="password" id="login-pass" placeholder="Nhập mật khẩu..." autofocus>
+      </div>
+      <button class="btn btn-green" style="width:100%;justify-content:center;margin-top:.5rem" id="login-btn">Đăng nhập</button>
+    </div>`;
+  document.getElementById('login-btn').addEventListener('click', doLogin);
+  document.getElementById('login-pass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+}
+
+async function doLogin() {
+  const pass = document.getElementById('login-pass').value.trim();
+  const res = await apiFetch('/api/admin/login', {
+    method: 'POST',
+    body: JSON.stringify({ password: pass }),
+  });
+  if (res.ok) {
+    TOKEN = res.token;
+    localStorage.setItem('newcho_admin_token', TOKEN);
+    toast('Đăng nhập thành công!');
+    render();
+  } else {
+    toast(res.error || 'Sai mật khẩu', 'err');
+  }
+}
+
+function logout() {
+  TOKEN = '';
+  localStorage.removeItem('newcho_admin_token');
+  render();
+}
+
+async function renderDashboard() {
+  document.getElementById('app').innerHTML = `
+    <div class="admin-header">
+      <h1>🌿 NEW <span>CHỢ</span> Admin Panel</h1>
+      <div class="header-actions">
+        <button class="hbtn hbtn-accent" id="btn-seed">📥 Import dữ liệu mẫu</button>
+        <button class="hbtn hbtn-outline" id="btn-clear-cache">🔄 Refresh cache</button>
+        <a href="/" class="hbtn hbtn-outline">👁️ Xem website</a>
+        <button class="hbtn hbtn-red" id="btn-logout">Đăng xuất</button>
+      </div>
+    </div>
+    <div class="admin-body">
+      <div class="section-tabs" id="section-tabs"></div>
+      <div id="section-content"></div>
+    </div>`;
+
+  document.getElementById('btn-logout').addEventListener('click', logout);
+  document.getElementById('btn-seed').addEventListener('click', seedData);
+  document.getElementById('btn-clear-cache').addEventListener('click', clearCache);
+
+  renderSectionTabs();
+  loadSection();
+}
+
+const SECTIONS = [
+  { id: 'products', label: '🛒 Sản phẩm', icon: '🛒' },
+  { id: 'new-arrivals', label: '✨ Hàng mới', icon: '✨' },
+  { id: 'specials', label: '🏷️ Khuyến mãi', icon: '🏷️' },
+  { id: 'services', label: '🔧 Dịch vụ', icon: '🔧' },
+  { id: 'household', label: '🏠 Gia dụng', icon: '🏠' },
+  { id: 'settings', label: '⚙️ Cài đặt', icon: '⚙️' },
+];
+
+function renderSectionTabs() {
+  const el = document.getElementById('section-tabs');
+  el.innerHTML = SECTIONS.map(s =>
+    `<button class="stab${s.id === currentSection ? ' active' : ''}" data-section="${s.id}">${s.label}</button>`
+  ).join('');
+  el.querySelectorAll('.stab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentSection = btn.dataset.section;
+      renderSectionTabs();
+      loadSection();
+    });
+  });
+}
+
+async function loadSection() {
+  const el = document.getElementById('section-content');
+  el.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--muted)">Đang tải...</div>';
+
+  try {
+    switch (currentSection) {
+      case 'products': await loadProducts(); break;
+      case 'new-arrivals': await loadGeneric('new-arrivals', ['emoji', 'viet_name', 'name', 'price', 'image_url']); break;
+      case 'specials': await loadSpecials(); break;
+      case 'services': await loadServices(); break;
+      case 'household': await loadGeneric('household', ['emoji', 'viet_name', 'name', 'price']); break;
+      case 'settings': await loadSettings(); break;
+    }
+  } catch (err) {
+    el.innerHTML = `<div class="card"><div style="color:var(--red);font-weight:700">Lỗi: ${esc(err.message)}</div><p style="color:var(--muted);font-size:.82rem;margin-top:.5rem">Kiểm tra lại Google Sheets config trong .env</p></div>`;
+  }
+}
+
+// ══════ PRODUCTS ══════
+
+async function loadProducts() {
+  const data = await apiFetch('/api/products');
+  allProducts = data;
+  if (data.length && !currentCatId) currentCatId = data[0].id;
+  renderProductsSection();
+}
+
+function renderProductsSection() {
+  const el = document.getElementById('section-content');
+  const cat = allProducts.find(c => c.id === currentCatId);
+  const items = cat ? cat.items : [];
+
+  el.innerHTML = `
+    <div class="card">
+      <div class="card-title">Danh mục sản phẩm</div>
+      <div class="tabs" id="prod-cat-tabs"></div>
+      ${cat ? `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem">
+        <span style="font-weight:700;font-size:.9rem">${esc(cat.label)} <span class="badge">${items.length} SP</span></span>
+        <button class="btn btn-green btn-sm" id="btn-add-product">+ Thêm SP</button>
+      </div>
+      <div class="items-list" id="items-list"></div>` : '<p style="color:var(--muted)">Chưa có danh mục nào. Hãy import dữ liệu mẫu.</p>'}
+    </div>`;
+
+  const tabsEl = document.getElementById('prod-cat-tabs');
+  tabsEl.innerHTML = allProducts.map(c =>
+    `<button class="tab${c.id === currentCatId ? ' active' : ''}" data-cat="${esc(c.id)}">${esc(c.label)}</button>`
+  ).join('');
+  tabsEl.querySelectorAll('.tab').forEach(btn => {
+    btn.addEventListener('click', () => { currentCatId = btn.dataset.cat; renderProductsSection(); });
+  });
+
+  if (cat) {
+    const listEl = document.getElementById('items-list');
+    if (!items.length) {
+      listEl.innerHTML = '<div style="padding:1.5rem;text-align:center;color:var(--muted)">Chưa có sản phẩm</div>';
+    } else {
+      listEl.innerHTML = items.map((it, i) => `
+        <div class="item-row">
+          <span class="item-icon">${esc(it.e)}</span>
+          <div class="item-name"><div class="item-viet">${esc(it.v)}</div><div class="item-en">${esc(it.n)}</div></div>
+          <span class="item-price">${fmt(it.p)}</span>
+          <div class="item-actions">
+            <button class="ibtn ibtn-edit" data-idx="${i}" title="Sửa">✏️</button>
+            <button class="ibtn ibtn-del" data-idx="${i}" title="Xoá">🗑️</button>
+          </div>
+        </div>`).join('');
+
+      listEl.querySelectorAll('.ibtn-edit').forEach(btn => {
+        btn.addEventListener('click', () => editProductForm(parseInt(btn.dataset.idx)));
+      });
+      listEl.querySelectorAll('.ibtn-del').forEach(btn => {
+        btn.addEventListener('click', () => deleteProduct(parseInt(btn.dataset.idx)));
+      });
+    }
+
+    document.getElementById('btn-add-product').addEventListener('click', () => addProductForm());
+  }
+}
+
+function addProductForm() {
+  const cat = allProducts.find(c => c.id === currentCatId);
+  showProductForm(null, cat);
+}
+
+function editProductForm(localIdx) {
+  const cat = allProducts.find(c => c.id === currentCatId);
+  const it = cat.items[localIdx];
+  let globalIdx = 0;
+  for (const c of allProducts) {
+    if (c.id === currentCatId) { globalIdx += localIdx; break; }
+    globalIdx += c.items.length;
+  }
+  showProductForm({ ...it, _globalIdx: globalIdx }, cat);
+}
+
+function showProductForm(item, cat) {
+  const isEdit = !!item;
+  const el = document.getElementById('section-content');
+  el.innerHTML = `
+    <div class="card">
+      <div class="card-title">${isEdit ? '✏️ Sửa sản phẩm' : '➕ Thêm sản phẩm mới'}</div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Tên tiếng Việt</label><input class="form-input" id="f-viet" value="${item ? esc(item.v) : ''}" placeholder="VD: Cải Thìa"></div>
+        <div class="form-group"><label class="form-label">Emoji</label><input class="form-input" id="f-emoji" value="${item ? item.e : '📦'}" style="font-size:1.2rem" placeholder="🥬"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Tên tiếng Anh</label><input class="form-input" id="f-name" value="${item ? esc(item.n) : ''}" placeholder="VD: Bok Choy – Bunch"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Giá (AUD $)</label><input class="form-input" id="f-price" type="number" step="0.01" min="0" value="${item ? item.p : ''}" placeholder="2.50"></div>
+        <div class="form-group"><label class="form-label">URL hình ảnh (tuỳ chọn)</label><input class="form-input" id="f-img" value="${item && item.img ? esc(item.img) : ''}" placeholder="https://..."></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:1rem">
+        <button class="btn btn-gray" id="btn-cancel">← Quay lại</button>
+        <button class="btn btn-green" id="btn-save">${isEdit ? '💾 Lưu thay đổi' : '➕ Thêm sản phẩm'}</button>
+      </div>
+    </div>`;
+
+  document.getElementById('btn-cancel').addEventListener('click', () => renderProductsSection());
+  document.getElementById('btn-save').addEventListener('click', async () => {
+    const viet = document.getElementById('f-viet').value.trim();
+    const name = document.getElementById('f-name').value.trim();
+    const emoji = document.getElementById('f-emoji').value.trim() || '📦';
+    const price = parseFloat(document.getElementById('f-price').value);
+    const img = document.getElementById('f-img').value.trim();
+    if (!viet || !name) { toast('Vui lòng nhập tên', 'err'); return; }
+    if (isNaN(price) || price < 0) { toast('Giá không hợp lệ', 'err'); return; }
+
+    const body = { category_id: cat.id, category_label: cat.label, emoji, viet_name: viet, name, price, image_url: img };
+
+    if (isEdit) {
+      await apiFetch(`/api/admin/products/${item._globalIdx}`, { method: 'PUT', body: JSON.stringify(body) });
+      toast('Đã cập nhật!');
+    } else {
+      await apiFetch('/api/admin/products', { method: 'POST', body: JSON.stringify(body) });
+      toast('Đã thêm sản phẩm!');
+    }
+    await apiFetch('/api/cache/clear', { method: 'POST' });
+    await loadProducts();
+  });
+}
+
+async function deleteProduct(localIdx) {
+  const cat = allProducts.find(c => c.id === currentCatId);
+  const it = cat.items[localIdx];
+  if (!confirm(`Xoá "${it.n}"?`)) return;
+
+  let globalIdx = 0;
+  for (const c of allProducts) {
+    if (c.id === currentCatId) { globalIdx += localIdx; break; }
+    globalIdx += c.items.length;
+  }
+  await apiFetch(`/api/admin/products/${globalIdx}`, { method: 'DELETE' });
+  toast('Đã xoá!');
+  await apiFetch('/api/cache/clear', { method: 'POST' });
+  await loadProducts();
+}
+
+// ══════ GENERIC (New Arrivals / Household) ══════
+
+async function loadGeneric(section, fields) {
+  const data = await apiFetch(`/api/${section}`);
+  renderGenericSection(section, fields, data);
+}
+
+function renderGenericSection(section, fields, items) {
+  const el = document.getElementById('section-content');
+  const sectionLabel = SECTIONS.find(s => s.id === section)?.label || section;
+  const isHousehold = section === 'household';
+  const hasImg = fields.includes('image_url');
+
+  el.innerHTML = `
+    <div class="card">
+      <div class="card-title">${sectionLabel} <span class="badge">${items.length} SP</span></div>
+      <button class="btn btn-green btn-sm" id="btn-add-generic" style="margin-bottom:.75rem">+ Thêm mới</button>
+      <div class="items-list" id="items-list">${!items.length ? '<div style="padding:1.5rem;text-align:center;color:var(--muted)">Chưa có dữ liệu</div>' : items.map((it, i) => `
+        <div class="item-row">
+          <span class="item-icon">${esc(it.e)}</span>
+          <div class="item-name"><div class="item-viet">${esc(it.v)}</div><div class="item-en">${esc(it.n)}</div></div>
+          <span class="item-price">${fmt(it.p)}</span>
+          <div class="item-actions">
+            <button class="ibtn ibtn-edit" data-idx="${i}">✏️</button>
+            <button class="ibtn ibtn-del" data-idx="${i}">🗑️</button>
+          </div>
+        </div>`).join('')}</div>
+    </div>`;
+
+  document.getElementById('btn-add-generic').addEventListener('click', () => showGenericForm(section, fields, null, items));
+  document.querySelectorAll('#items-list .ibtn-edit').forEach(btn => {
+    btn.addEventListener('click', () => showGenericForm(section, fields, { idx: parseInt(btn.dataset.idx), ...items[parseInt(btn.dataset.idx)] }, items));
+  });
+  document.querySelectorAll('#items-list .ibtn-del').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const idx = parseInt(btn.dataset.idx);
+      if (!confirm(`Xoá "${items[idx].n}"?`)) return;
+      await apiFetch(`/api/admin/${section}/${idx}`, { method: 'DELETE' });
+      toast('Đã xoá!');
+      await apiFetch('/api/cache/clear', { method: 'POST' });
+      loadGeneric(section, fields);
+    });
+  });
+}
+
+function showGenericForm(section, fields, item, items) {
+  const isEdit = !!item;
+  const el = document.getElementById('section-content');
+  const hasImg = fields.includes('image_url');
+
+  el.innerHTML = `
+    <div class="card">
+      <div class="card-title">${isEdit ? '✏️ Sửa' : '➕ Thêm mới'}</div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Tên tiếng Việt</label><input class="form-input" id="f-viet" value="${item ? esc(item.v) : ''}"></div>
+        <div class="form-group"><label class="form-label">Emoji</label><input class="form-input" id="f-emoji" value="${item ? item.e : '📦'}" style="font-size:1.2rem"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Tên tiếng Anh</label><input class="form-input" id="f-name" value="${item ? esc(item.n) : ''}"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Giá (AUD $)</label><input class="form-input" id="f-price" type="number" step="0.01" min="0" value="${item ? item.p : ''}"></div>
+        ${hasImg ? `<div class="form-group"><label class="form-label">URL hình ảnh</label><input class="form-input" id="f-img" value="${item && item.img ? esc(item.img) : ''}"></div>` : ''}
+      </div>
+      <div style="display:flex;gap:8px;margin-top:1rem">
+        <button class="btn btn-gray" id="btn-cancel">← Quay lại</button>
+        <button class="btn btn-green" id="btn-save">${isEdit ? '💾 Lưu' : '➕ Thêm'}</button>
+      </div>
+    </div>`;
+
+  document.getElementById('btn-cancel').addEventListener('click', () => loadGeneric(section, fields));
+  document.getElementById('btn-save').addEventListener('click', async () => {
+    const body = {
+      emoji: document.getElementById('f-emoji').value.trim() || '📦',
+      viet_name: document.getElementById('f-viet').value.trim(),
+      name: document.getElementById('f-name').value.trim(),
+      price: parseFloat(document.getElementById('f-price').value) || 0,
+    };
+    if (hasImg) body.image_url = document.getElementById('f-img')?.value.trim() || '';
+    if (!body.viet_name || !body.name) { toast('Vui lòng nhập tên', 'err'); return; }
+
+    if (isEdit) {
+      await apiFetch(`/api/admin/${section}/${item.idx}`, { method: 'PUT', body: JSON.stringify(body) });
+      toast('Đã cập nhật!');
+    } else {
+      await apiFetch(`/api/admin/${section}`, { method: 'POST', body: JSON.stringify(body) });
+      toast('Đã thêm!');
+    }
+    await apiFetch('/api/cache/clear', { method: 'POST' });
+    loadGeneric(section, fields);
+  });
+}
+
+// ══════ SPECIALS ══════
+
+async function loadSpecials() {
+  const data = await apiFetch('/api/specials');
+  renderSpecialsSection(data);
+}
+
+function renderSpecialsSection(items) {
+  const el = document.getElementById('section-content');
+  el.innerHTML = `
+    <div class="card">
+      <div class="card-title">🏷️ Khuyến mãi <span class="badge">${items.length} SP</span></div>
+      <button class="btn btn-green btn-sm" id="btn-add-spec" style="margin-bottom:.75rem">+ Thêm khuyến mãi</button>
+      <div class="items-list" id="items-list">${!items.length ? '<div style="padding:1.5rem;text-align:center;color:var(--muted)">Chưa có khuyến mãi</div>' : items.map((it, i) => `
+        <div class="item-row">
+          <span class="item-icon">🏷️</span>
+          <div class="item-name"><div class="item-viet">${esc(it.v)}</div><div class="item-en">${esc(it.n)}</div></div>
+          <span class="item-price" style="color:var(--red)">${fmt(it.now)} <small style="text-decoration:line-through;color:var(--muted);font-weight:400">${fmt(it.was)}</small></span>
+          <div class="item-actions">
+            <button class="ibtn ibtn-edit" data-idx="${i}">✏️</button>
+            <button class="ibtn ibtn-del" data-idx="${i}">🗑️</button>
+          </div>
+        </div>`).join('')}</div>
+    </div>`;
+
+  document.getElementById('btn-add-spec').addEventListener('click', () => showSpecialForm(null, items));
+  document.querySelectorAll('#items-list .ibtn-edit').forEach(btn => {
+    btn.addEventListener('click', () => showSpecialForm({ idx: parseInt(btn.dataset.idx), ...items[parseInt(btn.dataset.idx)] }, items));
+  });
+  document.querySelectorAll('#items-list .ibtn-del').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const idx = parseInt(btn.dataset.idx);
+      if (!confirm(`Xoá "${items[idx].n}"?`)) return;
+      await apiFetch(`/api/admin/specials/${idx}`, { method: 'DELETE' });
+      toast('Đã xoá!');
+      await apiFetch('/api/cache/clear', { method: 'POST' });
+      loadSpecials();
+    });
+  });
+}
+
+function showSpecialForm(item, items) {
+  const isEdit = !!item;
+  const el = document.getElementById('section-content');
+  el.innerHTML = `
+    <div class="card">
+      <div class="card-title">${isEdit ? '✏️ Sửa khuyến mãi' : '➕ Thêm khuyến mãi'}</div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Tên tiếng Việt</label><input class="form-input" id="f-viet" value="${item ? esc(item.v) : ''}"></div>
+        <div class="form-group"><label class="form-label">Tên tiếng Anh</label><input class="form-input" id="f-name" value="${item ? esc(item.n) : ''}"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Giá gốc ($)</label><input class="form-input" id="f-was" type="number" step="0.01" value="${item ? item.was : ''}"></div>
+        <div class="form-group"><label class="form-label">Giá khuyến mãi ($)</label><input class="form-input" id="f-now" type="number" step="0.01" value="${item ? item.now : ''}"></div>
+      </div>
+      <div class="form-group"><label class="form-label">URL hình ảnh</label><input class="form-input" id="f-img" value="${item && item.img ? esc(item.img) : ''}"></div>
+      <div style="display:flex;gap:8px;margin-top:1rem">
+        <button class="btn btn-gray" id="btn-cancel">← Quay lại</button>
+        <button class="btn btn-green" id="btn-save">${isEdit ? '💾 Lưu' : '➕ Thêm'}</button>
+      </div>
+    </div>`;
+
+  document.getElementById('btn-cancel').addEventListener('click', () => loadSpecials());
+  document.getElementById('btn-save').addEventListener('click', async () => {
+    const body = {
+      viet_name: document.getElementById('f-viet').value.trim(),
+      name: document.getElementById('f-name').value.trim(),
+      was_price: parseFloat(document.getElementById('f-was').value) || 0,
+      now_price: parseFloat(document.getElementById('f-now').value) || 0,
+      image_url: document.getElementById('f-img').value.trim() || '',
+    };
+    if (!body.viet_name || !body.name) { toast('Vui lòng nhập tên', 'err'); return; }
+
+    if (isEdit) {
+      await apiFetch(`/api/admin/specials/${item.idx}`, { method: 'PUT', body: JSON.stringify(body) });
+      toast('Đã cập nhật!');
+    } else {
+      await apiFetch('/api/admin/specials', { method: 'POST', body: JSON.stringify(body) });
+      toast('Đã thêm!');
+    }
+    await apiFetch('/api/cache/clear', { method: 'POST' });
+    loadSpecials();
+  });
+}
+
+// ══════ SERVICES ══════
+
+async function loadServices() {
+  const data = await apiFetch('/api/services');
+  renderServicesSection(data);
+}
+
+function renderServicesSection(items) {
+  const el = document.getElementById('section-content');
+  el.innerHTML = `
+    <div class="card">
+      <div class="card-title">🔧 Dịch vụ <span class="badge">${items.length}</span></div>
+      <button class="btn btn-green btn-sm" id="btn-add-svc" style="margin-bottom:.75rem">+ Thêm dịch vụ</button>
+      <div class="items-list" id="items-list">${!items.length ? '<div style="padding:1.5rem;text-align:center;color:var(--muted)">Chưa có dịch vụ</div>' : items.map((it, i) => `
+        <div class="item-row">
+          <span class="item-icon">${esc(it.icon)}</span>
+          <div class="item-name"><div class="item-en" style="font-weight:800">${esc(it.title)}</div><div class="item-viet" style="font-size:.72rem;color:var(--muted)">${esc(it.badge)}</div></div>
+          <span></span>
+          <div class="item-actions">
+            <button class="ibtn ibtn-edit" data-idx="${i}">✏️</button>
+            <button class="ibtn ibtn-del" data-idx="${i}">🗑️</button>
+          </div>
+        </div>`).join('')}</div>
+    </div>`;
+
+  document.getElementById('btn-add-svc').addEventListener('click', () => showServiceForm(null, items));
+  document.querySelectorAll('#items-list .ibtn-edit').forEach(btn => {
+    btn.addEventListener('click', () => showServiceForm({ idx: parseInt(btn.dataset.idx), ...items[parseInt(btn.dataset.idx)] }, items));
+  });
+  document.querySelectorAll('#items-list .ibtn-del').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const idx = parseInt(btn.dataset.idx);
+      if (!confirm(`Xoá "${items[idx].title}"?`)) return;
+      await apiFetch(`/api/admin/services/${idx}`, { method: 'DELETE' });
+      toast('Đã xoá!');
+      await apiFetch('/api/cache/clear', { method: 'POST' });
+      loadServices();
+    });
+  });
+}
+
+function showServiceForm(item, items) {
+  const isEdit = !!item;
+  const el = document.getElementById('section-content');
+  el.innerHTML = `
+    <div class="card">
+      <div class="card-title">${isEdit ? '✏️ Sửa dịch vụ' : '➕ Thêm dịch vụ'}</div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Icon</label><input class="form-input" id="f-icon" value="${item ? item.icon : '🔧'}" style="font-size:1.2rem"></div>
+        <div class="form-group"><label class="form-label">Tên dịch vụ</label><input class="form-input" id="f-title" value="${item ? esc(item.title) : ''}"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Mô tả</label><textarea class="form-input" id="f-desc">${item ? esc(item.desc) : ''}</textarea></div>
+      <div class="form-group"><label class="form-label">Badge</label><input class="form-input" id="f-badge" value="${item ? esc(item.badge) : ''}" placeholder="VD: Walk-in · No Booking"></div>
+      <div style="display:flex;gap:8px;margin-top:1rem">
+        <button class="btn btn-gray" id="btn-cancel">← Quay lại</button>
+        <button class="btn btn-green" id="btn-save">${isEdit ? '💾 Lưu' : '➕ Thêm'}</button>
+      </div>
+    </div>`;
+
+  document.getElementById('btn-cancel').addEventListener('click', () => loadServices());
+  document.getElementById('btn-save').addEventListener('click', async () => {
+    const body = {
+      icon: document.getElementById('f-icon').value.trim() || '🔧',
+      title: document.getElementById('f-title').value.trim(),
+      description: document.getElementById('f-desc').value.trim(),
+      badge: document.getElementById('f-badge').value.trim(),
+    };
+    if (!body.title) { toast('Vui lòng nhập tên', 'err'); return; }
+
+    if (isEdit) {
+      await apiFetch(`/api/admin/services/${item.idx}`, { method: 'PUT', body: JSON.stringify(body) });
+      toast('Đã cập nhật!');
+    } else {
+      await apiFetch('/api/admin/services', { method: 'POST', body: JSON.stringify(body) });
+      toast('Đã thêm!');
+    }
+    await apiFetch('/api/cache/clear', { method: 'POST' });
+    loadServices();
+  });
+}
+
+// ══════ SETTINGS ══════
+
+async function loadSettings() {
+  const data = await apiFetch('/api/settings');
+  renderSettingsSection(data);
+}
+
+function renderSettingsSection(settings) {
+  const el = document.getElementById('section-content');
+  const fields = [
+    { key: 'topbar_text', label: 'Top bar text', type: 'text' },
+    { key: 'hero_title', label: 'Hero title', type: 'text' },
+    { key: 'hero_title_em', label: 'Hero title (highlight)', type: 'text' },
+    { key: 'hero_subtitle', label: 'Hero subtitle', type: 'textarea' },
+    { key: 'phone', label: 'Số điện thoại', type: 'text' },
+    { key: 'email', label: 'Email', type: 'text' },
+    { key: 'website', label: 'Website', type: 'text' },
+    { key: 'facebook', label: 'Facebook', type: 'text' },
+    { key: 'address_line1', label: 'Địa chỉ dòng 1', type: 'text' },
+    { key: 'address_line2', label: 'Địa chỉ dòng 2', type: 'text' },
+    { key: 'address_line3', label: 'Địa chỉ dòng 3', type: 'text' },
+    { key: 'hours_mon_fri', label: 'Giờ mở cửa T2-T6', type: 'text' },
+    { key: 'hours_sat', label: 'Giờ mở cửa T7', type: 'text' },
+    { key: 'hours_sun', label: 'Giờ mở cửa CN', type: 'text' },
+    { key: 'maps_url', label: 'Google Maps URL', type: 'text' },
+  ];
+
+  el.innerHTML = `
+    <div class="card">
+      <div class="card-title">⚙️ Cài đặt cửa hàng</div>
+      <p style="color:var(--muted);font-size:.82rem;margin-bottom:1rem">Cập nhật thông tin hiển thị trên website. Hoặc bạn có thể chỉnh sửa trực tiếp trên Google Sheets.</p>
+      ${fields.map(f => `
+        <div class="form-group">
+          <label class="form-label">${f.label}</label>
+          ${f.type === 'textarea'
+            ? `<textarea class="form-input" id="s-${f.key}">${esc(settings[f.key] || '')}</textarea>`
+            : `<input class="form-input" id="s-${f.key}" value="${esc(settings[f.key] || '')}">`
+          }
+        </div>`).join('')}
+      <button class="btn btn-green" id="btn-save-settings" style="margin-top:.75rem">💾 Lưu cài đặt</button>
+    </div>`;
+
+  document.getElementById('btn-save-settings').addEventListener('click', async () => {
+    const body = {};
+    fields.forEach(f => {
+      const val = document.getElementById('s-' + f.key);
+      body[f.key] = val ? val.value : '';
+    });
+    await apiFetch('/api/admin/settings', { method: 'PUT', body: JSON.stringify(body) });
+    toast('Đã lưu cài đặt!');
+    await apiFetch('/api/cache/clear', { method: 'POST' });
+  });
+}
+
+// ══════ SEED & CACHE ══════
+
+async function seedData() {
+  if (!confirm('Import dữ liệu mẫu sẽ ghi đè toàn bộ dữ liệu hiện tại trên Google Sheets. Tiếp tục?')) return;
+  toast('Đang import...');
+  const res = await apiFetch('/api/admin/seed', { method: 'POST' });
+  if (res.ok) {
+    toast(res.message || 'Import thành công!');
+    await apiFetch('/api/cache/clear', { method: 'POST' });
+    loadSection();
+  } else {
+    toast(res.error || 'Lỗi import', 'err');
+  }
+}
+
+async function clearCache() {
+  await apiFetch('/api/cache/clear', { method: 'POST' });
+  toast('Cache đã được xoá! Dữ liệu sẽ được tải lại từ Google Sheets.');
+  loadSection();
+}
+
+// ══════ INIT ══════
+render();
+</script>
+</body>
+</html>
